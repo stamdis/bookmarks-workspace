@@ -6,6 +6,7 @@ import { BookmarksOverviewComponent } from './bookmarks-overview/bookmarks-overv
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BookmarksLibModule } from '@bookmarks-workspace/bookmarks-lib';
+import { BookmarksFormComponent } from './bookmarks-form/bookmarks-form.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { BookmarksLibModule } from '@bookmarks-workspace/bookmarks-lib';
     FormsModule,
     BookmarksLibModule
   ],
-  declarations: [BookmarksOverviewComponent],
-  exports: [BookmarksOverviewComponent],
+  declarations: [BookmarksOverviewComponent, BookmarksFormComponent],
+  exports: [BookmarksOverviewComponent, BookmarksFormComponent],
 })
 export class BookmarksUiModule {}
