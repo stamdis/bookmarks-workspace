@@ -17,7 +17,8 @@
     "paths": {
       "@bookmarks-workspace/angular-material": [
         "libs/angular-material/src/index.ts"
-      ]
+      ],
+      "@bookmarks-workspace/bookmarks-lib": ["libs/bookmarks-lib/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

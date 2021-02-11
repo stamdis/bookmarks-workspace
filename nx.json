@@ -18,6 +18,7 @@
   "projects": {
     "bookmarks": { "tags": [] },
     "bookmarks-e2e": { "tags": [], "implicitDependencies": ["bookmarks"] },
-    "angular-material": { "tags": [] }
+    "angular-material": { "tags": [] },
+    "bookmarks-lib": { "tags": [] }
   }
 }

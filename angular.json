@@ -170,6 +170,31 @@
           }
         }
       }
+    },
+    "bookmarks-lib": {
+      "projectType": "library",
+      "root": "libs/bookmarks-lib",
+      "sourceRoot": "libs/bookmarks-lib/src",
+      "prefix": "bookmarks-workspace",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/bookmarks-lib/src/**/*.ts",
+              "libs/bookmarks-lib/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/bookmarks-lib"],
+          "options": {
+            "jestConfig": "libs/bookmarks-lib/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }
