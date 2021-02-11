@@ -19,6 +19,7 @@
     "bookmarks": { "tags": [] },
     "bookmarks-e2e": { "tags": [], "implicitDependencies": ["bookmarks"] },
     "angular-material": { "tags": [] },
-    "bookmarks-lib": { "tags": [] }
+    "bookmarks-lib": { "tags": [] },
+    "bookmarks-ui": { "tags": [] }
   }
 }

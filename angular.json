@@ -195,6 +195,31 @@
           }
         }
       }
+    },
+    "bookmarks-ui": {
+      "projectType": "library",
+      "root": "libs/bookmarks-ui",
+      "sourceRoot": "libs/bookmarks-ui/src",
+      "prefix": "bookmarks-workspace",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/bookmarks-ui/src/**/*.ts",
+              "libs/bookmarks-ui/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/bookmarks-ui"],
+          "options": {
+            "jestConfig": "libs/bookmarks-ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }
