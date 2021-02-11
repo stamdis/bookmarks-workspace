@@ -1,1 +1,29 @@
-<p>bookmarks-form works!</p>
+<header>
+    <h2>{{data.bookmark ? 'Bookmark details' : 'Create bookmark'}}</h2>
+</header>
+<form fxLayout="column" fxLayoutGap="1vh" [formGroup]="bookmarkForm">
+    <mat-form-field appearance="outline">
+        <mat-label>Id</mat-label>
+        <input type="text" matInput placeholder="Test" formControlName="id" readonly>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput placeholder="Add a bookmark name" formControlName="name" required>
+        <mat-error *ngIf="bookmarkForm.controls['name'].invalid">{{errorMessage}}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Group</mat-label>
+        <input type="text" matInput placeholder="Fill a group" formControlName="group" required>
+        <mat-error *ngIf="bookmarkForm.controls['group'].invalid">{{errorMessage}}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>URL</mat-label>
+        <input type="url" matInput placeholder="Add a bookmark name" formControlName="url" required>
+        <mat-error *ngIf="bookmarkForm.controls['url'].invalid">{{urlErrorMessage}}</mat-error>
+    </mat-form-field>
+    <footer fxLayout="row" fxLayoutGap="2.5vw">
+        <button mat-raised-button fxFlex="grow" color="primary" (click)="create()" [disabled]="bookmarkForm.invalid" *ngIf="!data.bookmark">Create</button>
+        <button mat-raised-button fxFlex="grow" color="accent" (click)="close()">Close</button>
+        <button mat-raised-button fxFlex="grow" color="warn" (click)="delete()" *ngIf="data.bookmark">Delete</button>
+    </footer>
+</form>

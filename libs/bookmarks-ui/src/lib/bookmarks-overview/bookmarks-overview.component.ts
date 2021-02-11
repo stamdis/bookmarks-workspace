@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AfterViewInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BookmarksEntity, BookmarksFacade } from '@bookmarks-workspace/bookmarks-lib';
+import { BookmarksFormComponent } from '../bookmarks-form/bookmarks-form.component';
 
 interface Group {
   name: string;
@@ -18,6 +20,8 @@ interface Group {
   styleUrls: ['./bookmarks-overview.component.scss']
 })
 export class BookmarksOverviewComponent implements OnInit, AfterViewInit {
+
+  dialogWidth = '35vw';
 
   data: BookmarksEntity[];
 
@@ -38,7 +42,9 @@ export class BookmarksOverviewComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private bookmarksFacade: BookmarksFacade) {
+  constructor(private bookmarksFacade: BookmarksFacade, private dialog: MatDialog) {
+
+    this.dataSource = new MatTableDataSource([]);
 
     // Assign the data to the data source for the table to render
     bookmarksFacade.allBookmarks$.subscribe(x => {
@@ -51,7 +57,7 @@ export class BookmarksOverviewComponent implements OnInit, AfterViewInit {
       // STAMATIS: Must filter x according to what user has selected
       const selectedGroups = this.getSelectedGroups();
       const filteredX = this.data.filter(bookmark => selectedGroups.includes(bookmark.group));
-      this.dataSource = new MatTableDataSource(filteredX);
+      this.dataSource.data = filteredX;
     });
 
     bookmarksFacade.init();
@@ -106,4 +112,33 @@ export class BookmarksOverviewComponent implements OnInit, AfterViewInit {
       this.dataSource.data = filteredX;
     }
   }
+
+  /**
+   * Logic that is executed when the user wants to see bookmark details.
+   * @param bookmark the bookmark entity for which details should be shown.
+   */
+  showBookmarkDetails(bookmark: BookmarksEntity) {
+    this.dialog.open(BookmarksFormComponent, {
+      width: this.dialogWidth,
+      data: { bookmark }
+    });
+  }
+
+  /**
+   * Logic that is executed when the user wants to add a bookmark.
+   * A new bookmark id is passed to the form.
+   */
+  addBookmark() {
+    this.dialog.open(BookmarksFormComponent, {
+      width: this.dialogWidth,
+      data: { newId: this.findNewId(this.data) }
+    });
+  }
+
+  /**
+   * Logic that returns a new numeric id.
+   * The maximum numeric id is found among the bookmark entities & is returned incremented by 1.
+   * @param bookmarks the current bookmark entity collection.
+   */
+  findNewId = (bookmarks: BookmarksEntity[]) => (bookmarks.length > 0 ? Math.max(...bookmarks.map(bookmark => +bookmark.id)) : 0) + 1;
 }

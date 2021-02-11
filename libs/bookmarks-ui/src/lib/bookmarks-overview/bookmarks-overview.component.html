@@ -13,6 +13,7 @@
             </li>
         </ul>
     </span>
+    <button mat-raised-button color="primary" (click)="addBookmark()">Add new bookmark</button>
 </section>
 
 <mat-form-field>
@@ -48,7 +49,7 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showBookmarkDetails(row)"></tr>
 
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
