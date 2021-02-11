@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { select, Store, Action } from '@ngrx/store';
 
 import * as BookmarksActions from './bookmarks.actions';
+import { BookmarksEntity } from './bookmarks.models';
 import * as BookmarksFeature from './bookmarks.reducer';
 import * as BookmarksSelectors from './bookmarks.selectors';
 
@@ -24,5 +25,13 @@ export class BookmarksFacade {
    */
   init() {
     this.store.dispatch(BookmarksActions.init());
+  }
+
+  deleteBookmark(bookmark: BookmarksEntity) {
+    this.store.dispatch(BookmarksActions.deleteBookmark({ bookmark }));
+  }
+
+  createBookmark(bookmark: BookmarksEntity) {
+    this.store.dispatch(BookmarksActions.createBookmark({ bookmark }));
   }
 }

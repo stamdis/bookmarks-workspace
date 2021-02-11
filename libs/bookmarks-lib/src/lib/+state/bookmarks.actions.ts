@@ -12,3 +12,13 @@ export const loadBookmarksFailure = createAction(
   '[Bookmarks/API] Load Bookmarks Failure',
   props<{ error: any }>()
 );
+
+export const deleteBookmark = createAction(
+  '[Bookmarks/API] Delete Bookmark',
+  props<{ bookmark: BookmarksEntity }>()
+);
+
+export const createBookmark = createAction(
+  '[Bookmarks/API] Create Bookmark',
+  props<{ bookmark: BookmarksEntity }>()
+);

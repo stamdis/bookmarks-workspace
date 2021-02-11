@@ -36,8 +36,14 @@ const bookmarksReducer = createReducer(
   on(BookmarksActions.loadBookmarksFailure, (state, { error }) => ({
     ...state,
     error,
-  }))
-);
+  })),
+  on(BookmarksActions.deleteBookmark, (state, { bookmark }) =>
+    bookmarksAdapter.removeOne(bookmark.id.toString(), state)
+  ),
+  on(BookmarksActions.createBookmark, (state, { bookmark }) =>
+    bookmarksAdapter.addOne(bookmark, state)
+  )
+)
 
 export function reducer(state: State | undefined, action: Action) {
   return bookmarksReducer(state, action);
