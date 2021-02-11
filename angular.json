@@ -145,6 +145,31 @@
           }
         }
       }
+    },
+    "angular-material": {
+      "projectType": "library",
+      "root": "libs/angular-material",
+      "sourceRoot": "libs/angular-material/src",
+      "prefix": "bookmarks-workspace",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/angular-material/src/**/*.ts",
+              "libs/angular-material/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/angular-material"],
+          "options": {
+            "jestConfig": "libs/angular-material/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   }
 }

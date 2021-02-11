@@ -17,6 +17,7 @@
   },
   "projects": {
     "bookmarks": { "tags": [] },
-    "bookmarks-e2e": { "tags": [], "implicitDependencies": ["bookmarks"] }
+    "bookmarks-e2e": { "tags": [], "implicitDependencies": ["bookmarks"] },
+    "angular-material": { "tags": [] }
   }
 }
