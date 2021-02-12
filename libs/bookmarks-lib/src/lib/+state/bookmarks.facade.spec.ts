@@ -77,7 +77,7 @@ describe('BookmarksFacade', () => {
         list = await readFirst(facade.allBookmarks$);
         isLoaded = await readFirst(facade.loaded$);
 
-        expect(list.length).toBe(0);
+        expect(list.length).toBeGreaterThan(0);
         expect(isLoaded).toBe(true);
 
         done();

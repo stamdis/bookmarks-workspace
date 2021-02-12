@@ -1,10 +1,14 @@
 import { TestBed } from '@angular/core/testing';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { BookmarksUiModule } from '@bookmarks-workspace/bookmarks-ui';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
+      imports: [BookmarksUiModule, StoreModule.forRoot({}), EffectsModule.forRoot([])],
     }).compileComponents();
   });
 

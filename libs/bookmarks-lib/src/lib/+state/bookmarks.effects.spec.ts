@@ -8,7 +8,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { NxModule, DataPersistence } from '@nrwl/angular';
 import { hot } from '@nrwl/angular/testing';
 
-import { BookmarksEffects } from './bookmarks.effects';
+import { BookmarksEffects, mockBookmarks } from './bookmarks.effects';
 import * as BookmarksActions from './bookmarks.actions';
 
 describe('BookmarksEffects', () => {
@@ -34,7 +34,7 @@ describe('BookmarksEffects', () => {
       actions = hot('-a-|', { a: BookmarksActions.init() });
 
       const expected = hot('-a-|', {
-        a: BookmarksActions.loadBookmarksSuccess({ bookmarks: [] }),
+        a: BookmarksActions.loadBookmarksSuccess({ bookmarks: mockBookmarks }),
       });
 
       expect(effects.init$).toBeObservable(expected);
