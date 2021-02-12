@@ -25,42 +25,33 @@ export class BookmarksOverviewComponent implements OnInit, AfterViewInit {
 
   data: BookmarksEntity[];
 
-  group: Group = {
+  parentGroup: Group = {
     name: 'All',
-    selected: false,
+    selected: true,
     groups: []
   };
 
-  allComplete: boolean = false;
-
-  ngOnInit(): void {
-  }
-
   displayedColumns: string[] = ['id', 'name', 'group', 'url'];
-  dataSource: MatTableDataSource<BookmarksEntity>;
+  dataSource: MatTableDataSource<BookmarksEntity> = new MatTableDataSource([]);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private bookmarksFacade: BookmarksFacade, private dialog: MatDialog) {
+  constructor(private bookmarksFacade: BookmarksFacade, private dialog: MatDialog) {}
 
-    this.dataSource = new MatTableDataSource([]);
-
-    // Assign the data to the data source for the table to render
-    bookmarksFacade.allBookmarks$.subscribe(x => {
-      this.data = x;
-      // STAMATIS: Find distinct groups
-      const distinctGroups = [...new Set(this.data.map(bookmark => bookmark.group))];
-      console.log(distinctGroups.map(group => ({ name: group, selected: true })));
-      this.group.groups = distinctGroups.map(group => ({ name: group, selected: false }));
-      this.setAll(true);
-      // STAMATIS: Must filter x according to what user has selected
-      const selectedGroups = this.getSelectedGroups();
-      const filteredX = this.data.filter(bookmark => selectedGroups.includes(bookmark.group));
-      this.dataSource.data = filteredX;
+  ngOnInit(): void {
+    // Define the logic upon bookmark state changes.
+    this.bookmarksFacade.allBookmarks$.subscribe(newBookmarks => {
+      // Store the data so we can do the group filtering inside the component.
+      this.data = newBookmarks;
+      // Update group selector checkboxes (new bookmark groups might get introduced).
+      this.parentGroup.groups = this.updateGroupSelectorCheckboxes(this.data, this.parentGroup);
+      // Update the Angular Material table component with the filtered (by group selector) data.
+      this.dataSource.data = this.data.filter(bookmark => this.getSelectedGroups(this.parentGroup).includes(bookmark.group));
     });
 
-    bookmarksFacade.init();
+    // Initialize the bookmark state
+    this.bookmarksFacade.init();
   }
 
   ngAfterViewInit() {
@@ -68,49 +59,38 @@ export class BookmarksOverviewComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  /**
+   * Logic that returns an array of distinct bookmarks groups.
+   * @param bookmarks the bookmark collection.
+   */
+  findDistinctGroups = (bookmarks: BookmarksEntity[]) => [...new Set(bookmarks.map(bookmark => bookmark.group))];
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  /**
+   * Logic that returns the currently selected bookmark groups.
+   * @param parentGroup the parent checkbox model.
+   */
+  getSelectedGroups = (parentGroup: Group) => parentGroup.groups.filter(x => x.selected).map(x => x.name);
 
-  updateAllComplete() {
-    this.updateBasedOnGroups();
-
-    this.allComplete = this.group.groups != null && this.group.groups.every(t => t.selected);
-  }
-
-  someComplete(): boolean {
-    if (this.group.groups == null) {
-      return false;
-    }
-    return this.group.groups.filter(t => t.selected).length > 0 && !this.allComplete;
-  }
-
-  setAll(selected: boolean) {
-    this.allComplete = selected;
-    if (this.group.groups == null) {
-      return;
-    }
-    this.group.groups.forEach(t => t.selected = selected);
-    // Stam
-    this.updateBasedOnGroups();
+  /**
+   * Logic that updates the component bookmark data according to new bookmarks and/or group selector state.
+   * @param bookmarks the bookmark collection.
+   * @param parentGroup the parent checkbox model.
+   */
+  updateData(bookmarks: BookmarksEntity[], parentGroup: Group) {
+    const selectedGroups = this.getSelectedGroups(parentGroup);
+    return bookmarks.filter(bookmark => selectedGroups.includes(bookmark.group));
   }
 
   /**
-   * Helper method that returns the currently selected bookmark groups.
+   * Logic that updates the available group selector checkboxes & returns an updated collection.
+   * @param bookmarks the bookmark collection.
+   * @param parentGroup the parent checkbox model.
    */
-  getSelectedGroups = () => this.group.groups.filter(x => x.selected).map(x => x.name);
-
-  updateBasedOnGroups() {
-    const selectedGroups = this.getSelectedGroups();
-    const filteredX = this.data.filter(bookmark => selectedGroups.includes(bookmark.group));
-    if (this.dataSource) {
-      this.dataSource.data = filteredX;
-    }
+  updateGroupSelectorCheckboxes(bookmarks: BookmarksEntity[], parentGroup: Group): Group[] {
+    const currentGroups = parentGroup.groups.map(group => group.name);
+    const newDistinctGroups = this.findDistinctGroups(bookmarks).filter(group => !currentGroups.includes(group));
+    const newGroups = newDistinctGroups.map(group => ({ name: group, selected: parentGroup.selected || this.areSomeGroupsSelected(parentGroup) }));
+    return parentGroup.groups.concat(newGroups);
   }
 
   /**
@@ -141,4 +121,57 @@ export class BookmarksOverviewComponent implements OnInit, AfterViewInit {
    * @param bookmarks the current bookmark entity collection.
    */
   findNewId = (bookmarks: BookmarksEntity[]) => (bookmarks.length > 0 ? Math.max(...bookmarks.map(bookmark => +bookmark.id)) : 0) + 1;
+
+  /**
+   * Logic that ensures that no bookmark details are shown in case the bookmark link was pressed.
+   * @param event the link click event.
+   */
+  linkClick = (event: MouseEvent) => event.stopPropagation();
+
+  /**
+   * Logic that is used when the user makes a search for his bookmarks through the user interface.
+   * @param event the keyboard event.
+   */
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  /**
+   * Logic that updates the data & any necessary checkbox state.
+   * Executed when the user clicks on any group selector in the user interface.
+   */
+  onCheckboxChange() {
+    this.dataSource.data = this.updateData(this.data, this.parentGroup);
+    this.parentGroup.selected = this.parentGroup.groups != null && this.parentGroup.groups.every(t => t.selected);
+  }
+
+  /**
+   * Logic that returns true if at least one group checkbox is selected.
+   * @param parentGroup the parent checkbox model.
+   */
+  areSomeGroupsSelected(parentGroup: Group): boolean {
+    if (parentGroup.groups == null) {
+      return false;
+    }
+    return parentGroup.groups.filter(t => t.selected).length > 0 && !parentGroup.selected;
+  }
+
+  /**
+   * Logic that updates the data & any necessary checkbox state.
+   * Executed when the user clicks on the 'All' group selector in the user interface.
+   * @param selected the value of the checkbox.
+   */
+  onAllCheckboxChange(selected: boolean) {
+    this.parentGroup.selected = selected;
+    if (this.parentGroup.groups == null) {
+      return;
+    }
+    this.parentGroup.groups.forEach(t => t.selected = selected);
+    this.dataSource.data = this.updateData(this.data, this.parentGroup);
+  }
 }
