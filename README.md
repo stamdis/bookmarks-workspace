@@ -1,105 +1,68 @@
+# Bookmarks
 
+## Project description
 
-# BookmarksWorkspace
+### Summary
 
-This project was generated using [Nx](https://nx.dev).
+This repository contains an example monorepo project created with [Nx suite](https://nx.dev/) and [Angular](https://angular.io/). The main project consists of a simple application that manages bookmarks.
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+### Libraries & frameworks
 
-🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
+- [Angular 11](https://angular.io/) as the main development framework.
+- [Angular Material 11.2](https://material.angular.io/) for the user interface.
+- [Angular Flex-Layout 11](https://github.com/angular/flex-layout) for the layout features (easy appliance of Flexbox CSS).
+- [Ngrx 10](https://ngrx.io/) for managing the application state in a reactive manner.
+- [Nx extensive dev tools 11.2](https://nx.dev/) for scaffolding the application, generation & management of Angular modules & components.
 
-## Quick Start & Documentation
+## Application features & screenshots
 
-[Nx Documentation](https://nx.dev/angular)
+The following features are available in the application:
 
-[10-minute video showing all Nx features](https://nx.dev/angular/getting-started/what-is-nx)
+- Overview of bookmarks in a sortable & paginated table.
+- Ability to configure number of items per table page.
+- Filter bookmarks based on the group property.
+- Full text search on the bookmarks collection.
+- Navigation to the bookmark URL by clicking on the link.
+- View the details of a bookmark by clicking on its table row.
+- Delete a bookmark through the bookmark details dialog.
+- Add a new bookmark through a validated dialog form.
 
-[Interactive Tutorial](https://nx.dev/angular/tutorial/01-create-application)
+Some example screenshots are provided below.
 
-## Adding capabilities to your workspace
+### Overview
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+!['Overview'](./readme/bookmarks_overview.png)
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+### Add a bookmark
 
-Below are our core plugins:
+!['Add a bookmark'](./readme/bookmarks_add.png)
 
-- [Angular](https://angular.io)
-  - `ng add @nrwl/angular`
-- [React](https://reactjs.org)
-  - `ng add @nrwl/react`
-- Web (no framework frontends)
-  - `ng add @nrwl/web`
-- [Nest](https://nestjs.com)
-  - `ng add @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `ng add @nrwl/express`
-- [Node](https://nodejs.org)
-  - `ng add @nrwl/node`
+### Bookmark details
 
-There are also many [community plugins](https://nx.dev/nx-community) you could add.
+!['Delete a bookmark'](./readme/bookmarks_details.png)
 
-## Generate an application
+## Instructions
 
-Run `ng g @nrwl/angular:app my-app` to generate an application.
+Before proceeding to the next sections, make sure you have installed [Node.js LTS](https://nodejs.org/en/).
 
-> You can use any of the plugins above to generate applications as well.
+### Run the application
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+To run the application follow the steps mentioned below:
 
-## Generate a library
+1. Clone the repository.
+2. Navigate to the project folder through a terminal.
+3. Execute `npm install` to install the project dependencies.
+4. Execute `nx serve bookmarks`.
+5. Navigate through your browser to `http://localhost:4200/`.
 
-Run `ng g @nrwl/angular:lib my-lib` to generate a library.
+### Run the tests
 
-> You can also use any of the plugins above to generate libraries as well.
+To run the Jest unit tests follow the steps mentioned below:
 
-Libraries are shareable across libraries and applications. They can be imported from `@bookmarks-workspace/mylib`.
+1. Clone the repository.
+2. Navigate to the project folder through a terminal.
+3. Execute `nx run-many --target=test --all` to execute the tests.
 
-## Development server
+## Misc
 
-Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng g component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
-
-
-
-
-
-
-## ☁ Nx Cloud
-
-### Computation Memoization in the Cloud
-
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+For misc information feel free to refer to the [Nx generated README](./README_nx.md).

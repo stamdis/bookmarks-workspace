@@ -10,7 +10,7 @@ import { BookmarksFacade } from '@bookmarks-workspace/bookmarks-lib';
 })
 export class BookmarksFormComponent implements OnInit {
 
-  urlRegex = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+  urlRegex = 'https?://?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
   /**
    * The Angular FormGroup object that contains all FormControl objects.
